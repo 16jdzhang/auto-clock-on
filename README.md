@@ -68,3 +68,4 @@ npm run test
 ## 联系方式
 
 16jdzhang@stu.edu.cn
+项目可能会有bug，请谅解
