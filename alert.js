@@ -1,36 +1,15 @@
-const http=require("http");
-const { exec } = require('child_process');
+const notifier = require('node-notifier');
+const path = require('path');
 
 function alert(message){
-    var server=new http.Server();
-    server.on("request",function(req,res){
-        res.write(`
-        <html>
-        <head>
-        <meta charset="utf-8"/>
-        </head>
-        <body>
-        <h1>
-        ${message}
-        </h1>
-        </body>
-        </html>
-        `);
-        res.end();
-        server.close();
-    });
-    server.listen();
-
-    setTimeout(() => {
-        try{
-            server.close();
-        }
-        catch(e){
-            ;
-        }
-    }, 60*1000);
-    
-    exec(`start http://localhost:${server.address().port}/`);
+    notifier.notify(
+    {
+        title: '自动打卡',
+        message: message,
+        sound: true, 
+        wait: true 
+    }
+    );
 }
 
 module.exports = {

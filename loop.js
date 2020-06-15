@@ -24,7 +24,6 @@ function loop(cb){
     }
     try{
         var date_json = fs.readFileSync('date.json');
-        console.log(new String(date_json));
         date_json = JSON.parse(date_json);
         if (!(date_json.latest)){
             throw 'no latest';
@@ -39,7 +38,6 @@ function loop(cb){
         }
     }
     catch(e){
-        console.log(e);
         cb(today, success, fail);
     }
 }

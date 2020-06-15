@@ -15,22 +15,19 @@ function entry(){
     logger.info('开机。');
     alert('今天好啊！');
     loop(function(date, success, fail){
-        try{
-            clock_on().then(function(){
-                alert(`
-                今天，<br/>
-                ${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}，<br/>
-                已签到。
-                `);
+        (async ()=>{
+            try{
+                await clock_on();
+                alert(`今天，${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}，已签到。`);
                 logger.info(`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}，已签到。`);
                 success();
-            });
-        }
-        catch(e){
-            logger.error(e);
-            alert(e.toString());
-            fail();
-        }
+            }
+            catch(e){
+                logger.error(e);
+                alert(e.toString());
+                fail();
+            }
+        })();
     });
 }
 
