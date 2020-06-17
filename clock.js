@@ -9,15 +9,17 @@ var clock_on = async () => {
     const page = await browser.newPage();
     await page.goto('https://my.stu.edu.cn/health-report/report/report.do');
 
+    // await page.waitForNavigation();
+
     await (await page.$('[href=init-stu-user]')).click();
 
-    await new Promise((res, rej) => setTimeout(res, 2000));
+    await page.waitForNavigation();
 
     await (await page.$('#username')).type(userinfo.username);
     await (await page.$('#password')).type(userinfo.password);
     await (await page.$('#login')).click();
     
-    await new Promise((res, rej) => setTimeout(res, 2000));
+    await page.waitForNavigation();
 
     // <input type="number" name="dailyReport.afternoorBodyHeat" value="36.8" style="width: 50px" required=""></input>
     await page.$eval('input[name="dailyReport.afternoorBodyHeat"]',input => input.value='' );
@@ -37,10 +39,17 @@ var clock_on = async () => {
     // <button id="submitBtn3" class="active">提交健康信息</button>
     await page.click('#submitBtn3');
 
-    
+    // <div id="noticeMsg" align="center"></div>
+    // <div id="noticeMsg" align="center" style="display: block;">今天(06月17日)数据已上报成功!</div>
+    await page.waitForSelector('#noticeMsg[style="display: block;"]');
+
     if (headless){
-        await new Promise((res, rej) => setTimeout(res, 2000));
-        await page.pdf({path: path.join(__dirname, `pdf/${moment(Date.now()).format('YYYY_MM_DD_HH_mm_ss')}.pdf`)});
+        try {
+            await page.pdf({path: path.join(__dirname, `pdf/${moment(Date.now()).format('YYYY_MM_DD_HH_mm_ss')}.pdf`)});
+        }
+        catch(e){
+            console.log(e);
+        }
     }
 
     if (headless){
